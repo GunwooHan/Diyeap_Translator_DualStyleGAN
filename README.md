@@ -1,3 +1,35 @@
+# DiyeapStyleTransfer : Fine-tuning DualStyleGAN for Specific Cartoon Style Face Generation
+
+## 
+  
+I crawled [diyeap artwork](https://www.pixiv.net/users/42399563) in pixiv  using [Hitomi-Downloader](https://github.com/KurtBestor/Hitomi-Downloader) And face detect and crop image include full face using Yolov5. I tried to find cartoon full face detector but Cartoon style has various face shapes, so I couldn't find the detector that fits my case, and the existing Cartoon face detector couldn't find the face of diyeap style Cartoon character, so I trained custom Cartoon face detector and proceeded 
+
+<br>
+
+As a result, 815 images used to train, Pretrained models are taken from original repo  
+
+<br>
+
+Translation results are not good when experimented with default option. I experimented with a variety of options with reference to the [Issue](https://github.com/williamyang1991/DualStyleGAN/issues/19)  
+
+
+<img src="./doc_images/diyeap_overview.jpg" width="96%" height="96%">
+
+<figcaption align = "center"><b>Fig.1 - DualStyleGAN Diyeap StyleTransfer Fine-tuning Result</b></figcaption>
+</figure>
+
+
+<br>
+
+<img src="./doc_images/cartoon_transfer_0_081680_overview.jpg" width="96%" height="96%">
+
+<figcaption align = "center"><b>Fig.2 - DualStyleGAN Default Option Result</b></figcaption>
+</figure>
+
+
+  
+
+
 # DualStyleGAN - Official PyTorch Implementation
 
 <img src="./doc_images/overview.jpg" width="96%" height="96%">
