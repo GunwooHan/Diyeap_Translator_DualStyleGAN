@@ -1,34 +1,88 @@
-# DiyeapStyleTransfer : Fine-tuning DualStyleGAN for Specific Cartoon Style Face Generation
+# DiyeapStyleTransfer : Fine-tuning DualStyleGAN for Diyeap Cartoon Style Face Generation
 
 ## 
   
 I crawled [diyeap artwork](https://www.pixiv.net/users/42399563) in pixiv  using [Hitomi-Downloader](https://github.com/KurtBestor/Hitomi-Downloader) And face detect and crop image include full face using Yolov5. I tried to find cartoon full face detector but Cartoon style has various face shapes, so I couldn't find the detector that fits my case, and the existing Cartoon face detector couldn't find the face of diyeap style Cartoon character, so I trained custom Cartoon face detector and proceeded 
 
+<p align="center">
+  <img src="./doc_images/detect_face.jpg" width="96%" height="96%">
+  <br>
+  <b>Fig.1 - AnimeFace detector result</b>
+</p>
+
+
 <br>
 
 As a result, 815 images used to train, Pretrained models are taken from original repo  
 
-<br>
-
-Translation results are not good when experimented with default option. I experimented with a variety of options with reference to the [Issue](https://github.com/williamyang1991/DualStyleGAN/issues/19)  
-
-
-<img src="./doc_images/diyeap_overview.jpg" width="96%" height="96%">
-
-<figcaption align = "center"><b>Fig.1 - DualStyleGAN Diyeap StyleTransfer Fine-tuning Result</b></figcaption>
-</figure>
-
 
 <br>
 
-<img src="./doc_images/cartoon_transfer_0_081680_overview.jpg" width="96%" height="96%">
+Translation results are not good when experimented with default option. I experimented with a variety of options with reference to the [Issue](https://github.com/williamyang1991/DualStyleGAN/issues/19). The options I tried are below
 
-<figcaption align = "center"><b>Fig.2 - DualStyleGAN Default Option Result</b></figcaption>
-</figure>
+<br>
+
+<p align="center">
+  <img src="./doc_images/diyeap_overview.jpg" width="96%" height="96%">
+  <br>
+  <b>Fig.2 - DualStyleGAN Diyeap StyleTransfer Fine-tuning Result</b>
+</p>
+
+<br>
+
+```python
+
+# Tried Options
+
+python finetune_dualstylegan.py --iter 5000 --batch 24 --ckpt ./checkpoint/generator-pretrain.pt --style_loss 0.25 --CX_loss 0.25 --perc_loss 1 --id_loss 1 --L2_reg_loss 0.015 --augment diyeap --model_name generator_default --save_every 500
+
+python finetune_dualstylegan.py --iter 5000 --batch 24 --ckpt ./checkpoint/generator-pretrain.pt --style_loss 0.25 --CX_loss 0.25 --perc_loss 2.25 --id_loss 1 --L2_reg_loss 0.02 --augment diyeap --model_name generator_01 --save_every 500
+
+python finetune_dualstylegan.py --iter 5000 --batch 24 --ckpt ./checkpoint/generator-pretrain.pt --style_loss 0.25 --CX_loss 0.25 --perc_loss 1 --id_loss 2 --L2_reg_loss 0.01 --augment diyeap --model_name generator_02 --save_every 500
+
+python finetune_dualstylegan.py --iter 5000 --batch 24 --ckpt ./checkpoint/generator-pretrain.pt --style_loss 2.5 --CX_loss 0.25 --perc_loss 0.25 --id_loss 1 --L2_reg_loss 0.04 --augment diyeap --model_name generator_03 --save_every 500
 
 
-  
+```
 
+
+<br>
+
+
+<p align="center">
+  <img src="./doc_images/cartoon_transfer_0_081680_overview.jpg" width="96%" height="96%">
+  <br>
+  <b>Fig.3 - DualStyleGAN Default Option Result</b>
+</p>
+
+
+The style works, but id loss does not occur, so images are created only in monotonous patterns.
+
+
+## +Latent Optimization and Sampling
+
+I tried Latent Optimization and Sampling but colors are more similar, but the overall shape tends to collapse
+
+```python
+
+python refine_exstyle.py --lr_color 0.1 --lr_structure 0.005 --ckpt ./checkpoint/refine_checkpoints/generator_01-004500.pt diyeap
+
+```
+
+
+
+<p align="center">
+  <img src="./doc_images/generator_03-004500_113_081680_overview.jpg" width="96%" height="96%">
+  <br>
+  <b>Fig.4 - DualStyleGAN Additional Latent Optimization and Sampling Result</b>
+</p>
+
+
+
+
+
+
+---
 
 # DualStyleGAN - Official PyTorch Implementation
 
